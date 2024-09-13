@@ -1,14 +1,14 @@
 const router = require("express").Router()
- let usersDal=require("../dal/users-dal")
+ let usersLogic=require("../logic/users-logic")
 
 
 router.post("/register" ,async (request,response,next) => {
-    console.log("jyrggffg");
+   
     let userRegister=request.body;
    
-    console.log(userRegister);
+    //console.log(userRegister);
     try {
-        await usersDal.addUser(userRegister);
+        await usersLogic.addUser(userRegister);
         response.json();
        
 
