@@ -19,4 +19,19 @@ router.post("/register" ,async (request,response,next) => {
 });
 
 
+
+router.post("/login" , async (request ,response ,next) =>{
+ 
+    let userLogin= request.body;
+   // console.log(userLogin)
+ try {
+    let successFullLogin =await usersLogic.login(userLogin);
+    response.json(successFullLogin);
+ }
+ catch (error){
+ return next(error)
+ }
+})
+
+
  module.exports=router;

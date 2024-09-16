@@ -5,9 +5,9 @@ const connection = require('./connection-wrapper');
 async function addUser(userRegister) {
     // Insert into client_users table
     let sql2 = `insert into client_users(name, phone) values(?,?)`;
-    console.log(sql2);
+   // console.log(sql2);
     let parameters2 = [userRegister.name, userRegister.phone];
-    console.log(parameters2);
+   // console.log(parameters2);
     await connection.executeWithParameters(sql2, parameters2);
 
     // Get the client_user_id from the client_users table
@@ -19,7 +19,7 @@ async function addUser(userRegister) {
 
     // Insert into user table with the retrieved client_user_id
     let sql1 = `insert into user(email,password,client_user_id) values(?,?,?)`;
-    console.log(sql1);
+   console.log(userRegister.password + "  DB");
     let parameters1 = [userRegister.email, userRegister.password, userId];
     await connection.executeWithParameters(sql1, parameters1);
 }
@@ -37,25 +37,35 @@ async function getId(userRegister) {
     return userData[0].id;
 }
 
-
-async function isAlreadyExist(email) {
-    const sql = `SELECT email FROM user WHERE email = ?`;
+async function login(user) {
+    let sql = `
+        SELECT u.id , u.password , c.name 
+        FROM user u 
+        JOIN client_users c  ON c.id = u.client_user_id
+        WHERE u.email = ? `;
     
-    try {
-        const [rows] = await pool.query(sql, [email]);
-        
-        if (rows.length > 0) {
-            return true; 
-        } else {
-            return false; 
-        }
-    } catch (error) {
-        throw new Error('Database query failed');
+    let parameters = [user.email];
+    
+    let [userData] = await connection.executeWithParameters(sql, parameters);   
+   
+    if (!userData) {
+        return null;
     }
-}
 
+    return userData;
+}
+async function isAlreadyExist(userRegister) {
+    console.log(userRegister.email);
+    const sql = `SELECT id FROM user WHERE email = ?`;
+    let parameters = [userRegister.email];
+
+    let [id] = await connection.executeWithParameters(sql, parameters);
+
+    return id.length > 0; // Return true if email exists, false otherwise
+}
 
 module.exports = {
     addUser,
+    login,
     isAlreadyExist
 };
