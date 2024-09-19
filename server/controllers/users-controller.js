@@ -6,7 +6,7 @@ router.post("/register" ,async (request,response,next) => {
    
     let userRegister=request.body;
    
-    //console.log(userRegister);
+    console.log(userRegister);
     try {
         await usersLogic.addUser(userRegister);
         response.json();
@@ -23,7 +23,7 @@ router.post("/register" ,async (request,response,next) => {
 router.post("/login" , async (request ,response ,next) =>{
  
     let userLogin= request.body;
-   // console.log(userLogin)
+    console.log(userLogin)
  try {
     let successFullLogin =await usersLogic.login(userLogin);
     response.json(successFullLogin);

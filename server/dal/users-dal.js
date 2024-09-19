@@ -8,34 +8,21 @@ async function addUser(userRegister) {
    // console.log(sql2);
     let parameters2 = [userRegister.name, userRegister.phone];
    // console.log(parameters2);
-    await connection.executeWithParameters(sql2, parameters2);
-
+   const id = await connection.executeWithParameters(sql2, parameters2);
+        console.log(id)
     // Get the client_user_id from the client_users table
-    let userId = await getId(userRegister);
+   
 
-    if (userId === null) {
-        throw new Error('Failed to retrieve user ID after inserting into client_users');
-    }
+    
 
     // Insert into user table with the retrieved client_user_id
     let sql1 = `insert into user(email,password,client_user_id) values(?,?,?)`;
    console.log(userRegister.password + "  DB");
-    let parameters1 = [userRegister.email, userRegister.password, userId];
+    let parameters1 = [userRegister.email, userRegister.password, id.insertId];
     await connection.executeWithParameters(sql1, parameters1);
 }
 
-async function getId(userRegister) {
-    let sql = `SELECT id FROM client_users WHERE phone = ?`;
-    let parameters = [userRegister.phone];
-   
-    let userData = await connection.executeWithParameters(sql, parameters);   
-    
-    if (!userData || userData.length === 0) {
-        return null;
-    }
 
-    return userData[0].id;
-}
 
 async function login(user) {
     let sql = `
@@ -45,9 +32,9 @@ async function login(user) {
         WHERE u.email = ? `;
     
     let parameters = [user.email];
-    
-    let [userData] = await connection.executeWithParameters(sql, parameters);   
    
+    let [userData] = await connection.executeWithParameters(sql, parameters);   
+    console.log(userData)
     if (!userData) {
         return null;
     }
@@ -59,9 +46,11 @@ async function isAlreadyExist(userRegister) {
     const sql = `SELECT id FROM user WHERE email = ?`;
     let parameters = [userRegister.email];
 
-    let [id] = await connection.executeWithParameters(sql, parameters);
-
-    return id.length > 0; // Return true if email exists, false otherwise
+    let id = await connection.executeWithParameters(sql, parameters);
+   if(id.length > 0){
+    return true;
+   }
+    return false; // Return true if email exists, false otherwise
 }
 
 module.exports = {

@@ -6,27 +6,22 @@ const jwt = require('jsonwebtoken');
 
 async function addUser(userRegister) {
     console.log(userRegister);
-  //   validation.isAlreadyExists(userRegister);
+   validation.isAlreadyExists(userRegister);
+    validation.validateUser(userRegister);
     const hashedPassword = await hashPassword(userRegister.password);
     userRegister.password = hashedPassword; 
     console.log( userRegister.password + "  register")
-
-    validateUser(userRegister);
     await usersDal.addUser(userRegister);
 }
 
 
 async function login(userLogin) {
-  // Retrieve user data from the database using the email/username
   let userData = await usersDal.login(userLogin);
   
   if (!userData) {
       throw new Error("Login failed");
   }
-
-  
   const passwordMatch = await bcrypt.compare(userLogin.password, userData.password);
-  
   
   if (!passwordMatch) {
       throw new Error("Incorrect password");
@@ -38,7 +33,8 @@ async function login(userLogin) {
       name: userData.name
   }, config.secret);
 
-  let successfulLogin = { token };
+  let successfulLogin = {token,name: userData.name} ;
+
   return successfulLogin;
 }
 
@@ -52,17 +48,7 @@ const hashPassword = async (password) => {
 };
 
 
-function validateUser(userRegister) {
-   
-    // if (password.length < 5) {
-    //     throw new Error("Password is too short");
-    // }
-    
-    // const hasUppercaseOrSpecial = /[A-Z!@#$%^&*(),.?":{}|<>]/.test(password);
-    // if (!hasUppercaseOrSpecial) {
-    //     throw new Error("Password must contain at least one uppercase letter or special character");
-    // }
-}
+
   
 
 module.exports = {
