@@ -33,5 +33,30 @@ router.post("/login" , async (request ,response ,next) =>{
  }
 })
 
+router.post("/selectCategories" , async (request ,response ,next) =>{
+ 
+    let userLogin= request.body;
+    
+ try {
+    await usersLogic.login(userLogin);
+    
+ }
+ catch (error){
+ return next(error)
+ }
+})
+
+router.post("/createUserLog" , async (request ,response ,next) =>{
+   
+   let userLog= request.body;
+
+try {
+  await usersLogic.createUserLog(userLog);
+   
+}
+catch (error){
+return next(error)
+}
+})
 
  module.exports=router;

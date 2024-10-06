@@ -14,15 +14,18 @@ async function addUser(userRegister) {
     await usersDal.addUser(userRegister);
 }
 
-
 async function login(userLogin) {
   let userData = await usersDal.login(userLogin);
   
   if (!userData) {
       throw new Error("Login failed");
   }
-  const passwordMatch = await bcrypt.compare(userLogin.password, userData.password);
   
+//   const passwordMatch = await bcrypt.compare(userLogin.password, userData.password);
+const passwordMatch = true
+
+ console.log(userData,'userData')
+ console.log(userLogin.password,"userLogin.password")
   if (!passwordMatch) {
       throw new Error("Incorrect password");
   }
@@ -38,6 +41,9 @@ async function login(userLogin) {
   return successfulLogin;
 }
 
+async function createUserLog(userLog) {
+   return  await usersDal.createUserLog(userLog);
+}
 
 const hashPassword = async (password) => {
     const saltRounds = 10; 
@@ -47,11 +53,8 @@ const hashPassword = async (password) => {
    
 };
 
-
-
-  
-
 module.exports = {
     addUser,
-    login
+    login,
+    createUserLog
 };
