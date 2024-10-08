@@ -1,14 +1,16 @@
 const router = require("express").Router()
-let usersLogic=require("../logic/users-logic")
+let logsLogic=require("../logic/logs-logic")
 
 
 router.post("/" , async (request ,response ,next) =>{
    
    let userLog= request.body;
-   console.log(request)
+   console.log(userLog  +  "controller")
+ 
 try {
- await usersLogic.createUserLog(userLog);
+ await logsLogic.createUserLog(userLog);
  response.send("hello")
+ 
    
 }
 catch (error){

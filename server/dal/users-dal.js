@@ -52,30 +52,12 @@ async function isAlreadyExist(userRegister) {
    }
     return false; // Return true if email exists, false otherwise
 }
-async function createUserLog(userLog) {
-    let sql = `INSERT INTO user_logs (sub_expense_category, expense_category,
-    revenue_category, user_id, price, store_name) VALUES (?, ?, ?, ?, ?, ?)`;
-    
-    // Replace empty strings with null
-    let parameters = [
-        userLog.sub_expense_category ,
-        userLog.expense_category,
-        userLog.revenue_category,
-        userLog.user_id,
-        userLog.price,
-        userLog.store_name
-    ];
 
-    console.log(parameters, "  DB");
-    
-    return await connection.executeWithParameters(sql, parameters);
-}
 
 
 
 module.exports = {
     addUser,
     login,
-    createUserLog,
     isAlreadyExist
 };

@@ -3,7 +3,7 @@ let categoriesLogic = require("../logic/categories-logic");
 
 router.get("/", async (request, response, next) => {
   try {
-    // Fetch categories from logic layer
+    
     let categories = await categoriesLogic.getAllCategories();
     response.send(categories);
   } catch (error) {
@@ -14,7 +14,7 @@ router.get("/", async (request, response, next) => {
 
 router.get("/subCategory/:id", async (request, response, next) => {
     try {
-        let categoryId = request.params.id;  // :id is a URL parameter
+        let categoryId = request.params.id; 
         let subCategory = await categoriesLogic.getSubCategory(categoryId);
         
         response.json(subCategory);
