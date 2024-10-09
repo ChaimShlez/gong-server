@@ -18,4 +18,16 @@ return next(error)
 }
 })
 
+
+router.get("/:id", async (request, response, next) => {
+  try {
+   let userId = request.params.id; 
+    let activities = await logsLogic.getActivities(userId);
+    response.send(activities);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
  module.exports=router;
