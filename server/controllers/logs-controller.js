@@ -5,11 +5,12 @@ let logsLogic=require("../logic/logs-logic")
 router.post("/" , async (request ,response ,next) =>{
    
    let userLog= request.body;
-   console.log(userLog  +  "controller")
- 
 try {
  await logsLogic.createUserLog(userLog);
- response.send("hello")
+ let userId = 2 
+ console.log(userId)
+  let activities = await logsLogic.getActivities(userId)
+ response.json(activities)
  
    
 }
