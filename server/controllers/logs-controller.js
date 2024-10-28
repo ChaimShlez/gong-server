@@ -17,6 +17,20 @@ catch (error){
 return next(error)
 }
 })
+router.post("/income" , async (request ,response ,next) =>{
+   
+  let userLog= request.body;
+  console.log(userLog  +  "controller")
+
+try {
+await logsLogic.createIncome(userLog);
+response.send("hello")
+
+}
+catch (error){
+return next(error)
+}
+})
 
 
 router.get("/:id", async (request, response, next) => {

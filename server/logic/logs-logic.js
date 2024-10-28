@@ -16,9 +16,14 @@ async function createUserLog(userLog) {
     return  await logsDal.createUserLog(userLog);
  }
 
+ async function createIncome(userIncome) {
+  return  await logsDal.createIncome(userIncome);
+}
+
 
 module.exports = {
     
     createUserLog,
-    getActivities
+    getActivities,
+    createIncome
 };
