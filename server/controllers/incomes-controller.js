@@ -3,7 +3,6 @@ let incomesLogic = require("../logic/incomes-logic");
 
 router.get("/", async (request, response, next) => {
   try {
-    
     let incomes = await incomesLogic.getIncomes();
     response.send(incomes);
   } catch (error) {

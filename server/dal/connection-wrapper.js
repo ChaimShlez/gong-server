@@ -1,14 +1,13 @@
 const mysql = require("mysql2")
+require("dotenv").config();
 
-// Connection = קו תקשורת למסד הנתונים
 const connection = mysql.createConnection({
-    host: "localhost", // Computer
-    user: "root", // Username
-    password: "1234", 
-    database: "gong" // Database name
+    host: process.env.HOST, 
+    user: process.env.USER, 
+    password: process.env.PASSWORD, 
+    database:process.env.NAME 
 })
 
-// Connect to the database: 
 connection.connect(err => {
     if (err) {
         console.log("Failed to create connection + " + err)
@@ -17,13 +16,11 @@ connection.connect(err => {
     console.log("We're connected to MySQL")
 })
 
-
-// One function for executing select / insert / update / delete: 
+ 
 function execute(sql) {
     return new Promise((resolve, reject) => {
         connection.execute(sql, (err, result) => {
             if (err) {
-                // console.log("Error " + err);
                 reject(err)
                 return
             }
@@ -36,7 +33,6 @@ function executeWithParameters(sql, parameters) {
     return new Promise((resolve, reject) => {
         connection.execute(sql, parameters, (err, result) => {
             if (err) {
-                //console.log("Error " + err);
                 console.log("Failed interacting with DB, calling reject")
                 reject(err)
                 return
@@ -50,7 +46,6 @@ function query(sql, parameters){
     return new Promise((resolve, reject) => {
         connection.query(sql, parameters, (err, result) => {
             if (err) {
-                //console.log("Error " + err);
                 console.log("Failed interacting with DB, calling reject")
                 reject(err)
                 return

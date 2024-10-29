@@ -5,7 +5,7 @@ async function getCategoriesFromDB() {
       let sql = "SELECT * FROM gong.expense_category;";  
       
       let categories = await connection.executeWithParameters(sql);
-      console.log(categories)
+   
       return categories; 
     } catch (error) {
       throw new Error("Database query failed: " + error.message);
@@ -21,7 +21,7 @@ async function getCategoriesFromDB() {
         `;
         let parameters = [categoryId];
         let subCategory = await connection.executeWithParameters(sql, parameters);
-        console.log("db"+ subCategory);
+      
         return subCategory;
     } catch (error) {
         throw new Error("Database query failed: " + error.message);

@@ -1,60 +1,45 @@
 let usersDal = require("../dal/users-dal");
-let validation=require("../utils/validation");
-const config = require('../config/config.json');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+let validation = require("../utils/validation");
+const jwt = require("jsonwebtoken");
+const Hashes = require("jshashes");
+const SHA256 = new Hashes.SHA256();
 
 async function addUser(userRegister) {
-    console.log(userRegister);
-   validation.isAlreadyExists(userRegister);
-    validation.validateUser(userRegister);
-    const hashedPassword = await hashPassword(userRegister.password);
-    userRegister.password = hashedPassword; 
-    console.log( userRegister.password + "  register")
-    await usersDal.addUser(userRegister);
+  validation.isAlreadyExists(userRegister);
+  validation.validateUser(userRegister);
+  const hashedPassword = await hashPassword(userRegister.password);
+  userRegister.password = hashedPassword;
+  await usersDal.addUser(userRegister);
 }
 
 async function login(userLogin) {
-  let userData = await usersDal.login(userLogin);
+  let userData = await usersDal.login(userLogin.email);
+  const encryptPassword = SHA256.hex(userLogin.password);
+  if (userData[0].password !== undefined) {
+    if (encryptPassword === userData[0].password) {
+      let tokenData = {
+        userId: userData[0].id,
+      };
+      const token = jwt.sign({ tokenData }, `${process.env.TOKEN_SECRET_KEY}`);
+      let successfulLogin = { token, name: userData.name };
   
-  if (!userData) {
-      throw new Error("Login failed");
+      return successfulLogin;
+    } else {
+      throw new Error("Failed to connect");
+    }
   }
-  
-//   const passwordMatch = await bcrypt.compare(userLogin.password, userData.password);
-const passwordMatch = true
-
- console.log(userData,'userData')
- console.log(userLogin.password,"userLogin.password")
-  if (!passwordMatch) {
-      throw new Error("Incorrect password");
-  }
-
-  const token = jwt.sign({
-      userId: userData.id,
-     // password:userData.password,
-      name: userData.name
-  }, config.secret);
-
-  let successfulLogin = {token,name: userData.name} ;
-
-  return successfulLogin;
 }
 
 async function createUserLog(userLog) {
-   return  await usersDal.createUserLog(userLog);
+  return await usersDal.createUserLog(userLog);
 }
 
 const hashPassword = async (password) => {
-    const saltRounds = 10; 
-
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        return hashedPassword;
-   
+  return (encryptPassword = SHA256.hex(password));
 };
 
 module.exports = {
-    addUser,
-    login,
-    createUserLog
+  addUser,
+  login,
+  createUserLog,
 };

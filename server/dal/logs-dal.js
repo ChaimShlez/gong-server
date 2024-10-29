@@ -13,7 +13,7 @@ async function createUserLog(userLog) {
         parameters = [
             userLog.selectedSubCategory,
             userLog.category,
-            userLog.userID,
+            userLog.userId,
             userLog.price,
             userLog.storeName,
             userLog.paymentMethod
@@ -25,25 +25,19 @@ async function createUserLog(userLog) {
                VALUES (?, ?, ?, ?)`;
         
         parameters = [
-            userLog.userID,
+            userLog.userId,
             userLog.incomeManner,
             userLog.incomeAmount,
             userLog.incomeSource
         ];
     }
 
-    console.log(userLog, "  DB");
-    console.log(parameters, "  DB");
-    console.log(sql, "  DB");
-
     let userLogResult = await connection.executeWithParameters(sql, parameters);
     return userLogResult;
 }
 
 
-
-  
-async function getActivities(userID) {
+async function getActivities(userId) {
     let sql = `
      SELECT
        sc.name ,
@@ -57,10 +51,9 @@ async function getActivities(userID) {
      left JOIN sub_expense_category sc ON sc.id = ul.sub_expense_category 
       left JOIN revenue_categorys rc ON rc.id = ul.revenue_category
     WHERE ul.user_id=?`;
-    let parameters=[userID];
+    let parameters=[userId];
     let userLogs = await connection.executeWithParameters(sql, parameters);   
-    console.log(userLogs)
-    console.log(parameters)
+
     if (!userLogs) {
         return null;
     }

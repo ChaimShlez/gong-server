@@ -5,7 +5,7 @@ async function getIncomes() {
       let sql = "SELECT * FROM gong.revenue_categorys;";  
       
       let incomes = await connection.executeWithParameters(sql);
-      console.log(incomes)
+   
       return incomes; 
     } catch (error) {
       throw new Error("Database query failed: " + error.message);
