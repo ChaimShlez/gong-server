@@ -7,7 +7,7 @@ const categoriesController = require("./controllers/categories-controller");
 const incomesController = require("./controllers/incomes-controller");
 const server = express();
 const checkAuthorizationMiddleware = require("./middleware/checkAuthorization");
-
+const RabbitMqConnectionManeger = require("./message_stream/RabbitMQConnectionManager")
 
 server.use(cors());
 server.use(express.json());
@@ -19,7 +19,7 @@ server.use(checkAuthorizationMiddleware.checkAuthorization);
 server.use("/logs", logsController);
 server.use("/categories",categoriesController);
 server.use("/income",incomesController);
-
+RabbitMqConnectionManeger.initialize()
 //server.use(exceptionHandler)
 
 
