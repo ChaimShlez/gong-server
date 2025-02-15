@@ -10,7 +10,7 @@ function validateUser(user) {
     if (user.password.length < 5) {
         throw new Error("Password is too short");
     }
-    
+    console.log("hello 2")
     // const hasUppercaseOrSpecial = /[A-Z!@#$%^&*(),.?":{}|<>]/.test(user.password);
     // if (!hasUppercaseOrSpecial) {
     //     throw new Error("Password must contain at least one uppercase letter or special character");
