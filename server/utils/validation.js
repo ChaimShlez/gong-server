@@ -6,7 +6,7 @@ function validateUser(user) {
     if (!user.email) {
         throw new Error( "Email is empty")
     }
-
+console.log("hello dev1")
     if (user.password.length < 3) {
         throw new Error("Password is too short");
     }
